@@ -1,11 +1,11 @@
-/**
- * 全局组合式函数入口文件
- * 导出所有可用的组合式函数
- */
+// SSE 服务
+export { setupSse, cleanupSseServices } from "./sse";
+export { useSse, useDictSync, useOnlineCount, cleanupSse, SseConnectionState } from "./sse";
+export type { DictMessage, DictChangeMessage, DictChangeCallback } from "./sse";
 
-// 导出核心组合式函数
-export { useStomp } from "./useStomp";
+// 表格相关
+export { useTableSelection } from "./useTableSelection";
 
-// 导出业务服务组合式函数
-export { useDictSync } from "./useDictSync";
-export { useOnlineCount } from "./useOnlineCount";
+// 最近访问菜单
+export { useRecentMenus } from "./useRecentMenus";
+export type { RecentMenuItem } from "./useRecentMenus";

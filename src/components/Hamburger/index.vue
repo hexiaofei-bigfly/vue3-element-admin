@@ -5,9 +5,8 @@
 </template>
 
 <script setup lang="ts">
-import { useSettingsStore } from "@/store";
-import { ThemeMode, SidebarColor } from "@/enums/settings/theme.enum";
-import { LayoutMode } from "@/enums/settings/layout.enum";
+import { useSettingsStore } from "@/stores";
+import { ThemeMode, SidebarColor, LayoutMode } from "@/enums/settings";
 
 defineProps({
   isActive: { type: Boolean, required: true },
@@ -20,7 +19,7 @@ const layout = computed(() => settingsStore.layout);
 
 const hamburgerClass = computed(() => {
   // 如果暗黑主题
-  if (settingsStore.theme === ThemeMode.DARK) {
+  if (settingsStore.resolvedTheme === ThemeMode.DARK) {
     return "hamburger--white";
   }
 

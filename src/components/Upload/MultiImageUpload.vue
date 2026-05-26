@@ -40,7 +40,8 @@
 </template>
 <script setup lang="ts">
 import { UploadRawFile, UploadRequestOptions, UploadUserFile } from "element-plus";
-import FileAPI, { FileInfo } from "@/api/file.api";
+import FileAPI from "@/api/file";
+import type { FileInfo } from "@/api/file";
 
 const props = defineProps({
   /**
@@ -78,7 +79,7 @@ const props = defineProps({
    */
   accept: {
     type: String,
-    default: "image/*", //  默认支持所有图片格式 ，如果需要指定格式，格式如下：'.png,.jpg,.jpeg,.gif,.bmp'
+    default: "image/*", // 默认支持所有图片格式，如果需要指定格式，格式如下：.png,.jpg,.jpeg,.gif,.bmp
   },
 });
 
@@ -128,7 +129,7 @@ function handleBeforeUpload(file: UploadRawFile) {
   });
 
   if (!isValidType) {
-    ElMessage.warning(`上传文件的格式不正确，仅支持：${props.accept}`);
+    ElMessage.warning("上传文件的格式不正确，仅支持 " + props.accept);
     return false;
   }
 
@@ -155,13 +156,14 @@ function handleUpload(options: UploadRequestOptions) {
       formData.append(key, props.data[key]);
     });
 
-    FileAPI.upload(formData)
-      .then((data) => {
+    FileAPI.upload(formData).then(
+      (data) => {
         resolve(data);
-      })
-      .catch((error) => {
+      },
+      (error) => {
         reject(error);
-      });
+      }
+    );
   });
 }
 
@@ -169,7 +171,7 @@ function handleUpload(options: UploadRequestOptions) {
  * 上传文件超出限制
  */
 function handleExceed() {
-  ElMessage.warning("最多只能上传" + props.limit + "张图片");
+  ElMessage.warning("最多只能上传 " + props.limit + " 张图片");
 }
 
 /**
@@ -188,9 +190,11 @@ const handleSuccess = (fileInfo: FileInfo, uploadFile: UploadUserFile) => {
 /**
  * 上传失败回调
  */
-const handleError = (error: any) => {
-  console.log("handleError");
-  ElMessage.error("上传失败: " + error.message);
+const getErrorMessage = (error: unknown) =>
+  error instanceof Error ? error.message : String(error);
+
+const handleError = (error: unknown) => {
+  ElMessage.error("上传失败: " + getErrorMessage(error));
 };
 
 /**
@@ -211,5 +215,12 @@ const handlePreviewClose = () => {
 onMounted(() => {
   fileList.value = modelValue.value.map((url) => ({ url }) as UploadUserFile);
 });
+
+watch(
+  () => modelValue.value,
+  (newVal) => {
+    fileList.value = newVal.map((url) => ({ url }) as UploadUserFile);
+  }
+);
 </script>
 <style lang="scss" scoped></style>

@@ -1,4 +1,5 @@
-import UserAPI, { type UserForm } from "@/api/system/user.api";
+import UserAPI from "@/api/system/user";
+import type { UserForm } from "@/api/system/user";
 import type { IModalConfig } from "@/components/CURD/types";
 import { deptArr, roleArr } from "./options";
 
@@ -13,9 +14,6 @@ const modalConfig: IModalConfig<UserForm> = {
     labelWidth: 100,
   },
   formAction: UserAPI.create,
-  beforeSubmit(data) {
-    console.log("提交之前处理", data);
-  },
   formItems: [
     {
       label: "用户名",

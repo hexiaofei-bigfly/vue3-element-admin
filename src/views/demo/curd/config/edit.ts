@@ -1,7 +1,8 @@
-import UserAPI, { type UserForm } from "@/api/system/user.api";
+import UserAPI from "@/api/system/user";
+import type { UserForm } from "@/api/system/user";
 import type { IModalConfig } from "@/components/CURD/types";
-import { DeviceEnum } from "@/enums/settings/device.enum";
-import { useAppStore } from "@/store";
+import { DeviceEnum } from "@/enums/settings";
+import { useAppStore } from "@/stores";
 import { deptArr, roleArr } from "./options";
 
 const modalConfig: IModalConfig<UserForm> = {
@@ -12,9 +13,6 @@ const modalConfig: IModalConfig<UserForm> = {
     size: useAppStore().device === DeviceEnum.MOBILE ? "80%" : 500,
   },
   pk: "id",
-  beforeSubmit(data) {
-    console.log("beforeSubmit", data);
-  },
   formAction(data) {
     return UserAPI.update(data.id as string, data);
   },

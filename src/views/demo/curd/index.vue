@@ -1,12 +1,12 @@
-<template>
-  <div class="app-container h-full flex flex-1 flex-col">
+﻿<template>
+  <div class="page-container h-full flex flex-1 flex-col">
     <div class="flex-x-between mb-10">
       <el-link
         href="https://gitee.com/youlaiorg/vue3-element-admin/blob/master/src/views/demo/curd/index.vue"
         type="primary"
         target="_blank"
       >
-        示例源码 请点击>>>>
+        示例源码 请点击>>>
       </el-link>
       <el-button type="primary" plain round size="small" @click="isA = !isA">切换示例</el-button>
     </div>
@@ -33,19 +33,19 @@
         @filter-change="handleFilterChange"
       >
         <template #status="scope">
-          <el-tag :type="scope.row[scope.prop] == 1 ? 'success' : 'info'">
-            {{ scope.row[scope.prop] == 1 ? "启用" : "禁用" }}
+          <el-tag :type="scope.row[scope.prop] === 1 ? 'success' : 'info'">
+            {{ scope.row[scope.prop] === 1 ? "启用" : "禁用" }}
           </el-tag>
         </template>
         <template #gender="scope">
-          <DictLabel v-model="scope.row[scope.prop]" code="gender" />
+          <DictTag v-model="scope.row[scope.prop]" code="gender" />
         </template>
         <template #mobile="scope">
           <el-text>{{ scope.row[scope.prop] }}</el-text>
           <copy-button
             v-if="scope.row[scope.prop]"
             :text="scope.row[scope.prop]"
-            style="margin-left: 2px"
+            :style="{ marginLeft: '2px' }"
           />
         </template>
       </page-content>
@@ -57,7 +57,7 @@
         @submit-click="handleSubmitClick"
       >
         <template #gender="scope">
-          <Dict v-model="scope.formData[scope.prop]" code="gender" v-bind="scope.attrs" />
+          <DictSelect v-model="scope.formData[scope.prop]" code="gender" v-bind="scope.attrs" />
         </template>
         <template #openModal>
           <el-button type="primary" @click="openSecondModal">打开二级弹窗</el-button>
@@ -67,7 +67,7 @@
       <!-- 二级弹窗 -->
       <page-modal ref="addModalRef2" :modal-config="addModalConfig2" @custom-submit="secondSubmit">
         <template #gender="scope">
-          <Dict v-model="scope.formData[scope.prop]" code="gender" v-bind="scope.attrs" />
+          <DictSelect v-model="scope.formData[scope.prop]" code="gender" v-bind="scope.attrs" />
         </template>
       </page-modal>
 
@@ -78,7 +78,7 @@
         @submit-click="handleSubmitClick"
       >
         <template #gender="scope">
-          <Dict v-model="scope.formData[scope.prop]" code="gender" v-bind="scope.attrs" />
+          <DictSelect v-model="scope.formData[scope.prop]" code="gender" v-bind="scope.attrs" />
         </template>
       </page-modal>
     </template>
@@ -91,8 +91,8 @@
         @operate-click="handleOperateClick2"
       >
         <template #status="scope">
-          <el-tag :type="scope.row[scope.prop] == 1 ? 'success' : 'info'">
-            {{ scope.row[scope.prop] == 1 ? "启用" : "禁用" }}
+          <el-tag :type="scope.row[scope.prop] === 1 ? 'success' : 'info'">
+            {{ scope.row[scope.prop] === 1 ? "启用" : "禁用" }}
           </el-tag>
         </template>
       </page-content>
@@ -105,7 +105,7 @@
           <span>$</span>
         </template>
         <template #gender="scope">
-          <Dict v-model="scope.formData[scope.prop]" code="gender" v-bind="scope.attrs" />
+          <DictSelect v-model="scope.formData[scope.prop]" code="gender" v-bind="scope.attrs" />
         </template>
       </page-modal>
     </template>
@@ -113,7 +113,7 @@
 </template>
 
 <script setup lang="ts">
-import UserAPI from "@/api/system/user.api";
+import UserAPI from "@/api/system/user";
 import type { IObject, IOperateData, PageModalInstance } from "@/components/CURD/types";
 import usePage from "@/components/CURD/usePage";
 import addModalConfig from "./config/add";
@@ -143,20 +143,19 @@ const {
   handleFilterChange,
 } = usePage();
 
-// 其他工具栏
+// 其他工具
 function handleToolbarClick(name: string) {
-  console.log(name);
   if (name === "custom1") {
     ElMessage.success("点击了自定义1按钮");
   }
 }
 
-// 表格工具栏
+// 表格工具
 const handleOperateClick = (data: IObject) => {
   if (data.name === "detail") {
     editModalConfig.drawer = { ...editModalConfig.drawer, title: "查看" };
     handleViewClick(data.row, async () => {
-      // 加载下拉数据源，建议在初始化配置项 initFn 中加载，避免多次请求
+      // 加载下拉数据源，建议在初始化配置项"initFn 中加载，避免多次请求
       // editModalConfig.formItems[2]!.attrs!.data = await DeptAPI.getOptions();
       return await UserAPI.getFormData(data.row.id); // 根据ID获取详情
     });
@@ -166,20 +165,24 @@ const handleOperateClick = (data: IObject) => {
       return await UserAPI.getFormData(data.row.id); // 根据ID获取详情
     });
   } else if (data.name === "reset_pwd") {
-    ElMessageBox.prompt("请输入用户「" + data.row.username + "」的新密码", "重置密码", {
+    ElMessageBox.prompt("请输入用户名" + data.row.username + "」的新密码", "重置密码", {
       confirmButtonText: "确定",
       cancelButtonText: "取消",
-    })
-      .then(({ value }) => {
+    }).then(
+      (result: any) => {
+        const value = result.value;
         if (!value || value.length < 6) {
-          ElMessage.warning("密码至少需要6位字符，请重新输入");
+          ElMessage.warning("密码至少需6位字符，请重新输入");
           return false;
         }
         UserAPI.resetPassword(data.row.id, value).then(() => {
           ElMessage.success("密码重置成功，新密码是：" + value);
         });
-      })
-      .catch(() => {});
+      },
+      () => {
+        // 用户取消
+      }
+    );
   }
 };
 const handleOperateClick2 = (data: IOperateData) => {
@@ -199,8 +202,7 @@ const addModalRef2 = ref();
 const openSecondModal = () => {
   handleAddClick(addModalRef2 as Ref<PageModalInstance>);
 };
-const secondSubmit = (formData: any) => {
-  console.log("secondSubmit", formData);
+const secondSubmit = () => {
   ElMessage.success("二级弹窗提交成功");
 };
 

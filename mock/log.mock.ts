@@ -2,14 +2,14 @@ import { defineMock } from "./base";
 
 export default defineMock([
   {
-    url: "logs/page",
+    url: "logs",
     method: ["GET"],
     body: {
       code: "00000",
       data: {
         list: [
           {
-            id: 36192,
+            id: "36192",
             module: "菜单",
             content: "菜单列表",
             requestUri: "/api/v1/menus",
@@ -24,10 +24,10 @@ export default defineMock([
             operator: "系统管理员",
           },
           {
-            id: 36190,
+            id: "36190",
             module: "字典",
             content: "字典分页列表",
-            requestUri: "/api/v1/dict/page",
+            requestUri: "/api/v1/dicts",
             method: null,
             ip: "183.156.148.241",
             region: "浙江省 杭州市",
@@ -39,10 +39,10 @@ export default defineMock([
             operator: "系统管理员",
           },
           {
-            id: 36193,
+            id: "36193",
             module: "部门",
             content: "部门列表",
-            requestUri: "/api/v1/dept",
+            requestUri: "/api/v1/depts",
             method: null,
             ip: "192.168.31.134",
             region: "0 内网IP",
@@ -54,7 +54,7 @@ export default defineMock([
             operator: "系统管理员",
           },
           {
-            id: 36191,
+            id: "36191",
             module: "菜单",
             content: "菜单列表",
             requestUri: "/api/v1/menus",
@@ -69,10 +69,10 @@ export default defineMock([
             operator: "系统管理员",
           },
           {
-            id: 36189,
+            id: "36189",
             module: "角色",
             content: "角色分页列表",
-            requestUri: "/api/v1/roles/page",
+            requestUri: "/api/v1/roles",
             method: null,
             ip: "192.168.31.134",
             region: "0 内网IP",
@@ -84,10 +84,10 @@ export default defineMock([
             operator: "系统管理员",
           },
           {
-            id: 36188,
+            id: "36188",
             module: "用户",
             content: "用户分页列表",
-            requestUri: "/api/v1/users/page",
+            requestUri: "/api/v1/users",
             method: null,
             ip: "192.168.31.134",
             region: "0 内网IP",
@@ -99,7 +99,7 @@ export default defineMock([
             operator: "系统管理员",
           },
           {
-            id: 36187,
+            id: "36187",
             module: "登录",
             content: "登录",
             requestUri: "/api/v1/auth/login",
@@ -114,7 +114,7 @@ export default defineMock([
             operator: "系统管理员",
           },
           {
-            id: 36186,
+            id: "36186",
             module: "登录",
             content: "登录",
             requestUri: "/api/v1/auth/login",
@@ -129,7 +129,7 @@ export default defineMock([
             operator: "系统管理员",
           },
           {
-            id: 36185,
+            id: "36185",
             module: "登录",
             content: "登录",
             requestUri: "/api/v1/auth/login",
@@ -144,7 +144,7 @@ export default defineMock([
             operator: "系统管理员",
           },
           {
-            id: 36184,
+            id: "36184",
             module: "登录",
             content: "登录",
             requestUri: "/api/v1/auth/login",
@@ -165,7 +165,7 @@ export default defineMock([
     },
   },
   {
-    url: "logs/visit-trend",
+    url: "logs/analytics/trend",
     method: ["GET"],
     body: {
       code: "00000",
@@ -181,25 +181,23 @@ export default defineMock([
           "2024-07-07",
         ],
         pvList: [1751, 5168, 4882, 5301, 4721, 4885, 1901, 1003],
-        uvList: null,
-        ipList: [207, 566, 565, 631, 579, 496, 222, 152],
+        uvList: [207, 566, 565, 631, 579, 496, 222, 152],
       },
       msg: "一切ok",
     },
   },
-
   {
-    url: "logs/visit-stats",
+    url: "logs/analytics/overview",
     method: ["GET"],
     body: {
       code: "00000",
       data: {
+        todayUvCount: 169,
+        totalUvCount: 19985,
+        uvGrowthRate: -0.57,
         todayPvCount: 1629,
         totalPvCount: 286086,
         pvGrowthRate: -0.65,
-        todayIpCount: 169,
-        totalIpCount: 19985,
-        ipGrowthRate: -0.57,
       },
       msg: "一切ok",
     },

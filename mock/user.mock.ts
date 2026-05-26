@@ -7,55 +7,54 @@ export default defineMock([
     body: {
       code: "00000",
       data: {
-        userId: 2,
+        userId: "2",
         username: "admin",
         nickname: "系统管理员",
         avatar: "https://foruda.gitee.com/images/1723603502796844527/03cdca2a_716974.gif",
         roles: ["ADMIN"],
         perms: [
-          "sys:user:query",
-          "sys:user:add",
-          "sys:user:edit",
+          "sys:user:list",
+          "sys:user:create",
+          "sys:user:update",
           "sys:user:delete",
           "sys:user:import",
           "sys:user:export",
           "sys:user:reset-password",
 
-          "sys:role:query",
-          "sys:role:add",
-          "sys:role:edit",
+          "sys:role:list",
+          "sys:role:create",
+          "sys:role:update",
           "sys:role:delete",
 
-          "sys:dept:query",
-          "sys:dept:add",
-          "sys:dept:edit",
+          "sys:dept:list",
+          "sys:dept:create",
+          "sys:dept:update",
           "sys:dept:delete",
 
-          "sys:menu:query",
-          "sys:menu:add",
-          "sys:menu:edit",
+          "sys:menu:list",
+          "sys:menu:create",
+          "sys:menu:update",
           "sys:menu:delete",
 
-          "sys:dict:query",
-          "sys:dict:add",
-          "sys:dict:edit",
-          "sys:dict:delete",
+          "sys:dict:list",
+          "sys:dict:create",
+          "sys:dict:update",
           "sys:dict:delete",
 
-          "sys:dict-item:query",
-          "sys:dict-item:add",
-          "sys:dict-item:edit",
+          "sys:dict-item:list",
+          "sys:dict-item:create",
+          "sys:dict-item:update",
           "sys:dict-item:delete",
 
-          "sys:notice:query",
-          "sys:notice:add",
-          "sys:notice:edit",
+          "sys:notice:list",
+          "sys:notice:create",
+          "sys:notice:update",
           "sys:notice:delete",
           "sys:notice:revoke",
           "sys:notice:publish",
 
-          "sys:config:query",
-          "sys:config:add",
+          "sys:config:list",
+          "sys:config:create",
           "sys:config:update",
           "sys:config:delete",
           "sys:config:refresh",
@@ -66,14 +65,14 @@ export default defineMock([
   },
 
   {
-    url: "users/page",
+    url: "users",
     method: ["GET"],
     body: {
       code: "00000",
       data: {
         list: [
           {
-            id: 2,
+            id: "2",
             username: "admin",
             nickname: "系统管理员",
             mobile: "17621210366",
@@ -81,11 +80,11 @@ export default defineMock([
             avatar: "https://foruda.gitee.com/images/1723603502796844527/03cdca2a_716974.gif",
             email: "",
             status: 1,
-            deptId: 1,
+            deptId: "1",
             roleIds: [2],
           },
           {
-            id: 3,
+            id: "3",
             username: "test",
             nickname: "测试小用户",
             mobile: "17621210366",
@@ -93,7 +92,7 @@ export default defineMock([
             avatar: "https://foruda.gitee.com/images/1723603502796844527/03cdca2a_716974.gif",
             email: "youlaitech@163.com",
             status: 1,
-            deptId: 3,
+            deptId: "3",
             roleIds: [3],
           },
         ],
@@ -149,7 +148,7 @@ export default defineMock([
       return {
         code: "00000",
         data: null,
-        msg: "删除用户" + params.id + "成功",
+        msg: "删除用户" + params.userId + "成功",
       };
     },
   },
@@ -169,7 +168,7 @@ export default defineMock([
 
   // 导出Excel
   {
-    url: "users/_export",
+    url: "users/export",
     method: ["GET"],
     headers: {
       "Content-Disposition": "attachment; filename=%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8.xlsx",
@@ -183,7 +182,7 @@ export default defineMock([
     body: {
       code: "00000",
       data: {
-        id: 2,
+        id: "2",
         username: "admin",
         nickname: "系统管理员",
         avatar: "https://foruda.gitee.com/images/1723603502796844527/03cdca2a_716974.gif",
@@ -225,7 +224,7 @@ export default defineMock([
 // 用户映射表数据
 const userMap: Record<string, any> = {
   2: {
-    id: 2,
+    id: "2",
     username: "admin",
     nickname: "系统管理员",
     mobile: "17621210366",
@@ -233,11 +232,11 @@ const userMap: Record<string, any> = {
     avatar: "https://foruda.gitee.com/images/1723603502796844527/03cdca2a_716974.gif",
     email: "",
     status: 1,
-    deptId: 1,
+    deptId: "1",
     roleIds: [2],
   },
   3: {
-    id: 3,
+    id: "3",
     username: "test",
     nickname: "测试小用户",
     mobile: "17621210366",
@@ -245,7 +244,7 @@ const userMap: Record<string, any> = {
     avatar: "https://foruda.gitee.com/images/1723603502796844527/03cdca2a_716974.gif",
     email: "youlaitech@163.com",
     status: 1,
-    deptId: 3,
+    deptId: "3",
     roleIds: [3],
   },
 };

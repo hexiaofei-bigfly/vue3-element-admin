@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div>
     <h3 text-center m-0 mb-20px>{{ t("login.reg") }}</h3>
     <el-form ref="formRef" :model="model" :rules="rules" size="large">
@@ -48,28 +48,32 @@
 
       <!-- 验证码 -->
       <el-form-item prop="captchaCode">
-        <div flex>
+        <div flex items-center gap-10px>
           <el-input
             v-model.trim="model.captchaCode"
             :placeholder="t('login.captchaCode')"
+            clearable
+            class="flex-1"
             @keyup.enter="submit"
           >
             <template #prefix>
               <div class="i-svg:captcha" />
             </template>
           </el-input>
-          <div cursor-pointer h="[40px]" w="[120px]" flex-center ml-10px @click="getCaptcha">
-            <el-icon v-if="codeLoading" class="is-loading"><Loading /></el-icon>
-
+          <div cursor-pointer h-44px w-140px flex-center @click="getCaptcha">
+            <el-icon v-if="codeLoading" class="is-loading" size="20"><Loading /></el-icon>
             <img
-              v-else
-              object-cover
+              v-else-if="captchaBase64"
               border-rd-4px
-              p-1px
+              w-full
+              h-full
+              block
+              object-cover
               shadow="[0_0_0_1px_var(--el-border-color)_inset]"
               :src="captchaBase64"
               alt="code"
             />
+            <el-text v-else type="info" size="small">点击获取验证码</el-text>
           </div>
         </div>
       </el-form-item>
@@ -98,7 +102,8 @@
 import type { FormInstance } from "element-plus";
 import { Lock } from "@element-plus/icons-vue";
 import { useI18n } from "vue-i18n";
-import AuthAPI, { type LoginFormData } from "@/api/auth.api";
+import AuthAPI from "@/api/auth";
+import type { LoginRequest } from "@/api/auth";
 
 const { t } = useI18n();
 
@@ -113,7 +118,7 @@ const isCapsLock = ref(false); // 是否大写锁定
 const captchaBase64 = ref(); // 验证码图片Base64字符串
 const isRead = ref(false);
 
-interface Model extends LoginFormData {
+interface Model extends LoginRequest {
   confirmPassword: string;
 }
 
@@ -121,7 +126,7 @@ const model = ref<Model>({
   username: "admin",
   password: "123456",
   confirmPassword: "",
-  captchaKey: "",
+  captchaId: "",
   captchaCode: "",
   rememberMe: false,
 });
@@ -182,7 +187,7 @@ function getCaptcha() {
   codeLoading.value = true;
   AuthAPI.getCaptcha()
     .then((data) => {
-      model.value.captchaKey = data.captchaKey;
+      model.value.captchaId = data.captchaId;
       captchaBase64.value = data.captchaBase64;
     })
     .finally(() => (codeLoading.value = false));

@@ -1,11 +1,16 @@
 // https://eslint.org/docs/latest/use/configure/configuration-files-new
 
+// 基础ESLint配置
 import eslint from "@eslint/js";
-import pluginVue from "eslint-plugin-vue";
-import * as typescriptEslint from "typescript-eslint";
-import vueParser from "vue-eslint-parser";
 import globals from "globals";
+// TypeScript支持
+import * as typescriptEslint from "typescript-eslint";
+// Vue支持
+import pluginVue from "eslint-plugin-vue";
+import vueParser from "vue-eslint-parser";
+// 代码风格与格式化
 import configPrettier from "eslint-config-prettier";
+import prettierPlugin from "eslint-plugin-prettier";
 
 // 解析自动导入配置
 import fs from "node:fs";
@@ -59,6 +64,7 @@ export default [
       "**/*.min.*",
       "**/auto-imports.d.ts",
       "**/components.d.ts",
+      "types/**/*.d.ts",
     ],
   },
 
@@ -101,8 +107,8 @@ export default [
     },
     rules: {
       // 基础规则
-      "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
-      "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+      "no-console": ["error", { allow: ["warn", "error", "debug"] }],
+      "no-debugger": "error",
 
       // ES6+ 规则
       "prefer-const": "error",
@@ -110,7 +116,7 @@ export default [
       "object-shorthand": "error",
 
       // 最佳实践
-      eqeqeq: "off",
+      eqeqeq: ["error", "always", { null: "ignore" }],
       "no-multi-spaces": "error",
       "no-multiple-empty-lines": ["error", { max: 1, maxBOF: 0, maxEOF: 0 }],
 
@@ -132,6 +138,7 @@ export default [
         sourceType: "module",
         parser: typescriptEslint.parser,
         extraFileExtensions: [".vue"],
+        tsconfigRootDir: __dirname,
       },
     },
     rules: {
@@ -164,7 +171,7 @@ export default [
         },
       ],
       "vue/component-name-in-template-casing": ["error", "PascalCase"],
-      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-explicit-any": "warn",
     },
   },
 
@@ -174,18 +181,27 @@ export default [
     languageOptions: {
       parser: typescriptEslint.parser,
       parserOptions: {
-        project: true,
-        tsconfigRootDir: import.meta.dirname,
+        ecmaVersion: "latest",
+        sourceType: "module",
+        project: "./tsconfig.eslint.json",
+        tsconfigRootDir: __dirname,
       },
     },
     rules: {
       // TypeScript 规则
-      "@typescript-eslint/no-explicit-any": "off", // 允许使用any类型，方便开发
+      "@typescript-eslint/no-explicit-any": "warn", // 逐步收敛 any 类型
       "@typescript-eslint/no-empty-function": "off",
       "@typescript-eslint/no-empty-object-type": "off",
       "@typescript-eslint/ban-ts-comment": "off",
       "@typescript-eslint/no-non-null-assertion": "off",
-      "@typescript-eslint/no-unused-vars": "warn", // 降级为警告
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
       "@typescript-eslint/no-unused-expressions": "warn", // 降级为警告
       "@typescript-eslint/consistent-type-imports": "off", // 关闭强制使用type import
       "@typescript-eslint/no-import-type-side-effects": "error",
@@ -212,5 +228,15 @@ export default [
   },
 
   // Prettier 集成（必须放在最后）
-  configPrettier,
+  {
+    plugins: {
+      prettier: prettierPlugin, // 将 Prettier 的输出作为 ESLint 的问题来报告
+    },
+    rules: {
+      ...configPrettier.rules,
+      "prettier/prettier": ["error", {}, { usePrettierrc: true }],
+      "arrow-body-style": "off",
+      "prefer-arrow-callback": "off",
+    },
+  },
 ];
